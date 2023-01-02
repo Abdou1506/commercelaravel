@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Models\Coupon;
+
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+
 
 class CartUpdatingListener
 {
@@ -27,7 +27,7 @@ class CartUpdatingListener
      */
     public function handle($event)
     {
-        // $code=request()->session->get('code');
+        // $code=request()->session->get('coupon');
         // $coupon=Coupon::where('code',$code)->first();
         // if ($coupon) {
         //     request()->session()->put('coupon',[
@@ -36,7 +36,8 @@ class CartUpdatingListener
                 
         //     ]); 
         // }
-        }
+        // }
        
       
+}
 }

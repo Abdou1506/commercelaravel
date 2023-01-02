@@ -43,12 +43,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     /**
-     * Get all of the commandes for the User
+     * Get all of the orders for the User
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function commandes(): HasMany
+    public function orders(): HasMany
     {
-        return $this->hasMany(Commande::class);
+        return $this->hasMany(order::class);
     }
+
 }

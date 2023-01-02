@@ -67,8 +67,9 @@ class ProduitController extends Controller
      */
     public function show($id)
     {
-        $produits=Produit::find($id);
-    return view('Backend/produits/show', compact('produits'));
+        $produit=Produit::where('id', $id)->First();
+        $stock=$produit->stock===0 ? 'indisponible': 'disponible';
+    return view('Backend/produits.show', compact('produit','stock'));
     }
 
     /**
@@ -107,5 +108,5 @@ class ProduitController extends Controller
     {
         $produits=Produit::find($id);
         $produits->delete();
-        return redirect()->route('/produits.index')->with('notice','la suppression produit effectuée avec succés'); }
+        return redirect()->route('Backend/produits.index')->with('notice','la suppression produit effectuée avec succés'); }
 }

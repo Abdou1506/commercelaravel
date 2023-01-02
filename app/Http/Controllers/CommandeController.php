@@ -22,7 +22,7 @@ class CommandeController extends Controller
         $produits=Produit::all();
 
         // dd($produits,$commandes);
-        return view('commandes.index' ,compact('produits','commandes'));
+        return view('frontend/commandes.index' ,compact('produits','commandes'));
     }
 
     /**

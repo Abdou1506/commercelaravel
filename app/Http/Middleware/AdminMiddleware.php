@@ -19,3 +19,15 @@ class AdminMiddleware
         return $next($request);
     }
 }
+// if(Auth::check()){
+//     if(Auth::user()->role=='admin'){
+//         return $next($request);
+//     }
+//     else{
+//         return redirect('/produits.index')->with("status" ,"vous n'etes pas l'admin");
+//     }
+// }
+// else{
+//     return redirect('/produits.index')->with("status" ,"il faut se connecter d'abord");
+// }
+// }

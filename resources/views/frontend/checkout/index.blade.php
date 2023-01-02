@@ -19,7 +19,7 @@
                     <div id="cart-errors" role="alert">
                         <!--Stripe.js injects the Payment Element-->
                     </div>
-                    <button class="btn btn-success mt-3" id="submit">Procéder au paiement {{ Cart::total() }} FCFA</button>
+                    <button class="btn btn-success mt-3" id="submit">Procéder au paiement {{ $total }} FCFA</button>
                 </form>
 
             </div>
@@ -55,6 +55,7 @@
     };
 
     var card = elements.create("card", { style: style });
+    
     card.mount("#card-element");
     card.addEventListener('change', ({error}) => {
     const displayError = document.getElementById('card-errors');
@@ -99,6 +100,7 @@
                             method:'post',
                             body: JSON.stringify({
                                 paymentIntent: paymentIntent
+
                             })
                         }
                     ).then((data) => {

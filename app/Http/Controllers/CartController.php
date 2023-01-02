@@ -18,7 +18,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('cart.index');
+        return view('frontend/cart.index');
     }
 
     /**
@@ -45,11 +45,12 @@ class CartController extends Controller
              return $cartItem->id ===$request->produit_id;
          });
         if ($duplicata->isNotEmpty()) {
-            return redirect()->route('produits.index')->with('success','produit a déja été ajouté ');
+            return redirect()->route('frontend/produits.index')->with('success','produit a déja été ajouté ');
          }
         $produit=Produit::find($request->produit_id);
         Cart::add($produit->id,$produit->libelle,1,$produit->prix)->associate('App\Models\Produit');
-        return redirect()->route('produits.index')->with('success','produit a bien été ajouté avec  succé');
+        return redirect()->route('frontend/produits.index')->with('success','produit a bien été ajouté avec  succé');
+        
     }
 
     /**
@@ -60,7 +61,7 @@ class CartController extends Controller
      */
     public function show($id)
     {
-        //
+       
     }
 
     /**
@@ -93,8 +94,13 @@ class CartController extends Controller
 
         // return response()->json(['error'=>"cart  n'a été MAJ"]);
         // }
-        Cart::update($rowId, $request->quantity);
+    $produit=Produit::all();
+
+        Cart::update($rowId, $request->quantity,$request->qty,$request->stock);
         return back()->with('success','Le panier est mise a jour ');
+        if ($request->qty>$request->stock) {
+            return back()->with('error', 'la quantité demandée n\'est pas dispo',compact('produit'));
+           }
 
     }
 

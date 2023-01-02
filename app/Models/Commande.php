@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-      
 class Commande extends Model
 {
     use HasFactory;
@@ -38,6 +38,6 @@ class Commande extends Model
      */
     public function produit(): BelongsToMany
     {
-        return $this->belongsToMany(Produit::class, 'Commande_Produit_table', 'commande_id', 'produit_id');
+        return $this->belongsToMany(Produit::class)->withPivot('qty','prix');
     }
 }

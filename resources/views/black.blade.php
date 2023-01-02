@@ -39,7 +39,7 @@
 
 
     <!-- Navbar Start -->
-   <div class="col-md-6 text-center ml-5">
+   <div class="col-md-12 text-center ml-5">
      @if (session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
   @endif

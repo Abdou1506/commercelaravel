@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
+use App\Models\Order;
 use DateTime;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -22,17 +23,18 @@ class CheckoutController extends Controller
     public function index()
     {
             if (Cart::count()<= 0) {
-                return redirect()->route('produits.index');
+                return redirect()->route('frontend/produits.index');
             }
             Stripe::setApiKey('sk_test_51LyuCVKdngnkBYHhqjzKXo9wlEdiffsuLkD3EUK00pPhIwDo2ktGefxCdYTst79HEIC1laoPzwLk6I0ggMKKCxmi008pp25wVl');
-        //   if (request()->session()->has('coupon')) {
-        //     $total=Cart::subtotal() - request()->session()->get('coupon')['code']+(Cart::subtotal() - request()->session()->get('coupon')['code']*(config('cart.tax')/100));
-        //   } else {
-        //     $total=Cart::total();
-        //   }
+          if (request()->session()->has('coupon')) {
+            $total=(Cart::subtotal() - request()->session()->get('coupon')['remise'])+
+            (Cart::subtotal() - request()->session()->get('coupon')['remise']*(config('cart.tax')/100));
+          } else {
+            $total=Cart::total();
+          }
           
             $intent= PaymentIntent::create([
-                'amount'=>round(Cart::total()),
+                'amount'=>round($total),
                 'currency'=>'eur',
                 // 'metadata'=>[
                 //     'userId'=> Auth::user()->id
@@ -42,8 +44,9 @@ class CheckoutController extends Controller
         //dd($intent);
         $clientSecret= Arr::get($intent, 'client_secret');
     
-            return view('checkout.index',[
-                'clientSecret'=>$clientSecret
+            return view('frontend/checkout.index',[
+                'clientSecret'=>$clientSecret,
+                'total'=>$total
             ]);
         }
     
@@ -67,41 +70,27 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        // $commande=Commande::create([
-        //     'user_id'=>auth()->user()? auth()->user()->id:null,
-        //     'payment_intent_id'=>$request->payment_intent_id,
-        //     'amount'=>$request->amount,
-        //     'payment'=>$request->payment,
-             
-        //   'payment_created_at'=>$request->payment_created_at,
-
-        //     'produits'=>$request->produits
-
-        // ])
+        
         $data = $request->json()->all();
+        $order = new Order();
 
-        $commande = new Commande();
-
-        $commande->payment_intent_id = $data['paymentIntent']['id'];
-        $commande->amount = $data['paymentIntent']['amount'];
-
-        $commande->payment_created_at = (new DateTime())
+        $order->payment_intent_id = $data['paymentIntent']['id'];
+        $order->amount = $data['paymentIntent']['amount'];
+        $order->payment_created_at = (new DateTime())
             ->setTimestamp($data['paymentIntent']['created'])
             ->format('Y-m-d H:i:s');
-
         $produits = [];
-        $i = 0;
-
+        $i = 0; 
         foreach (Cart::content() as $produit) {
-            $produits['product_' . $i][] = $produit->model->libelle;
-            $produits['product_' . $i][] = $produit->model->prix;
-            $produits['product_' . $i][] = $produit->qty;
+            $produits['produit_' . $i][] = $produit->model->libelle;
+            $produits['produit_' . $i][] = $produit->model->prix;
+            $produits['produit_' . $i][] = $produit->qty;
             $i++;
         }
 
-        $commande->produits = serialize($produits);
-        $commande->user_id = Auth()->user()->id;
-        $commande->save();
+        $order->produits = serialize($produits);
+        $order->user_id = Auth()->user()->id;
+        $order->save();
 
         if ($data['paymentIntent']['status'] === 'succeeded') {
             Cart::destroy();
@@ -109,12 +98,12 @@ class CheckoutController extends Controller
             return response()->json(['success' => "merci  votre commande  a bien été prise en compte "]);
         } else {
             return response()->json(['error' => "désolé  votre commande  n'a été pas prise en compte  "]);
-        }
+        } 
     }
 
     public function thankyou()
     {
-        return Session::has('success') ? view('checkout.thankyou') : redirect()->route('produits.index');
+        return Session::has('success') ? view('frontend/checkout.thankyou') : redirect()->route('checkout.thankyou');
     }
 
 

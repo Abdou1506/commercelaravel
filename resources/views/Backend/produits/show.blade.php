@@ -25,37 +25,37 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($produits as $p)
+            
   
               <tr>
-                <th scope="row">{{$p->id}}</th>
+                <th scope="row">{{$produit->id}}</th>
                 <td>
-                  <img src="{{asset('images/'. $p->image)}}" width="100px" height="100px">
+                  <img src="{{asset('images/'. $produit->image)}}" width="100px" height="100px">
                 </td>
-                <td>{{$p->libelle}}</td>
-                <td>{{$p->slug}}</td>
-                <td>{{$p->subtitle}}</td>
-                <td>{{$p->description}}</td>
+                <td>{{$produit->libelle}}</td>
+                <td>{{$produit->slug}}</td>
+                <td>{{$produit->subtitle}}</td>
+                <td>{{$produit->description}}</td>
                
-                <td>{{$p->prix}}</td>
+                <td>{{$produit->prix}}</td>
                 {{-- <td>{{$p->categorie->nom}}</td> --}}
                 
                 <td class="btn-group  mt-4">
-                  <form method="post" action="{{route('produits.destroy',$p->id)}}" onclick="return confirm('supprimer?')">
+                  <form method="post" action="{{route('produits.destroy',$produit->id)}}" onclick="return confirm('supprimer?')">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
   
                   </form>
-                  <a class="btn btn-warning" href="{{route('produits.edit',$p)}}"><i class="fa-solid fa-pen-to-square"></i></a>
-                  <a class="btn btn-primary" href="{{route('produits.show',$p)}}"><i class="fa-solid fa-eye"></i></a>
+                  <a class="btn btn-warning" href="{{route('produits.edit',$produit)}}"><i class="fa-solid fa-pen-to-square"></i></a>
+                  {{-- <a class="btn btn-primary" href="{{route('produits.show',$produit)}}"><i class="fa-solid fa-eye"></i></a> --}}
   
                 </td>
   
   
   
               </tr>
-              @endforeach
+            
   
             </tbody>
           </table>

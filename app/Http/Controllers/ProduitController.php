@@ -16,12 +16,12 @@ class ProduitController extends Controller
     $produits=Produit::with('categories')->whereHas('categories'.function ( $query )
     {
       $query->where('slug', request()->categorie);
-    })->orderBy('created_at', 'DESC')->paginate(6);
+    })->orderBy('created_at', 'DESC')->paginate(8);
 } else {
-    $produits = Produit::with('categories')->orderBy('created_at', 'DESC')->paginate(6);
+    $produits = Produit::with('categories')->orderBy('created_at', 'DESC')->paginate(8);
 }
     $categorie=Categorie::all();
-    return view ('produits.index',compact('produits','categorie'));
+    return view ('frontend/produits.index',compact('produits','categorie'));
  }
 
 
@@ -30,7 +30,8 @@ class ProduitController extends Controller
    
 
     $produit=Produit::where('slug', $slug)->First();
-    return view('produits.show',compact('produit')) ;
+    $stock=$produit->stock===0 ? 'indisponible': 'disponible';
+    return view('frontend/produits.show',compact('produit','stock')) ;
 
  }
  public function search()

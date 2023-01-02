@@ -15,12 +15,10 @@ return new class extends Migration
     {
         Schema::create('commande_produit', function (Blueprint $table) {
             $table->id();
-            $table->integer('commande_id')->unsigned()->nullable();
-            $table->foreign('commande_id')->reference('id')->on('commandes')->onDelete('cascade')->onUpdate('cascade')->onDelete('set null');
-           
-            $table->integer('produit_id')->unsigned()->nullable();
-            $table->foreign('produit_id')->reference('id')->on('produits')->onDelete('cascade')->onUpdate('cascade')->onDelete('set null');
-            $table->integer('qty')->unsigned();
+            $table->foreignId('commande_id')->constrained('commande');
+            $table->foreignId('produit_id')->constrained('produit');
+            $table->integer('qty');
+            $table->integer('prix');
             $table->timestamps();
         });
     }

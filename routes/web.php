@@ -35,8 +35,8 @@ Route::get('/contact', function () {
     return view('contact.contact');
 });
 // la route des produits
-Route::get('/boutique', [ProduitController::class, 'index'])->name('produits.index');
- Route::get('/boutique/{slug}', [ProduitController::class, 'show'])->name('produits.show'); 
+Route::get('/boutique', [ProduitController::class, 'index'])->name('frontend/produits.index');
+ Route::get('/boutique/{slug}', [ProduitController::class, 'show'])->name('frontend/produits.show'); 
  route::get('/seaarch',[ProduitController::class, 'search'])->name('produits.search');
 // Route::resource('Produits', ProduitController::class);
 
